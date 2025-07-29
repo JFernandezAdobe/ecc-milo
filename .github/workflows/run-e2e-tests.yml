@@ -1,0 +1,35 @@
+name: Run E2E Tests
+on:
+  push:
+    branches:
+      - dev
+      - stage
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - stage
+      - main
+
+jobs:
+  trigger-circleci:
+    name: Trigger CircleCI E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CircleCI Pipeline
+        run: |
+          curl -X POST 'https://circle.ci.adobe.com/api/v2/project/gh/wcms/Platform-UI-EC/pipeline' \
+              -H 'Circle-Token: ${{ secrets.CCI_TOKEN }}' \
+              -H 'content-type: application/json' \
+              -d "{\"branch\":\"main\", \
+                    \"parameters\":{ \
+                      \"env\":\"stage\", \
+                      \"project\":\"t3\", \
+                      \"test_suite\":\"@smoke\", \
+                      \"test_jobs\":\"chrome-desktop\", \
+                      \"ecbranch\":\"${{ github.head_ref || github.ref_name }}\", \
+                      \"milobranch\":\"main\" \
+                    } \
+              }"
+        env:
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
