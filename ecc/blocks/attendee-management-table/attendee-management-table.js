@@ -16,6 +16,7 @@ import { getAttribute } from '../../scripts/data-utils.js';
 
 const { createTag } = await import(`${LIBS}/utils/utils.js`);
 
+// For test PR
 // Place these at the top so they're defined before use
 const stickyColumns = ['registrationStatus', 'checkedIn'];
 const SPECTRUM_COMPONENTS = [
